@@ -3,15 +3,38 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, Route, hashHistory } from 'react-router';
 import store from './store/index.js';
+import SessionActions from './actions/SessionActions.js';
 import App from './App.jsx';
+import LoginPage from './containers/LoginPage.jsx';
+import LoggedInLayout from './components/LoggedInLayout.jsx';
+import AboutPage from './components/AboutPage.jsx';
 
-ReactDOM.render(
-   <Provider store={store}>
-      <Router history={hashHistory}>
-         <Route path='/' component={App}>
+window.handleGoogleApiLoaded = () => {
+   store.dispatch(SessionActions.authorize(false, renderApp));
+};
 
-         </Route>
-      </Router>
-   </Provider>,
-   document.getElementById('mount-point')
-);
+function renderApp() {
+   ReactDOM.render(
+      <Provider store={store}>
+         <Router history={hashHistory}>
+            <Route path='/' component={App}>
+               <Route path='/login' component={LoginPage} />
+               <Route component={LoggedInLayout} onEnter={requireAuth}>
+                  <Route path='/about' component={AboutPage} />
+               </Route>
+            </Route>
+         </Router>
+      </Provider>,
+      document.getElementById('mount-point')
+   );
+}
+
+function requireAuth(nextState, replace) {
+   const isLoggedIn = store.getState().auth.isLoggedIn;
+   if (!isLoggedIn) {
+      replace({
+         pathname: '/login',
+         state: { nextPathname: nextState.location.pathname }
+      })
+   }
+}
