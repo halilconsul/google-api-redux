@@ -2,12 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, Route, hashHistory } from 'react-router';
+
 import store from './store/index.js';
 import SessionActions from './actions/SessionActions.js';
+
 import App from './App.jsx';
-import LoginPage from './containers/LoginPage.jsx';
 import LoggedInLayout from './components/LoggedInLayout.jsx';
 import AboutPage from './components/AboutPage.jsx';
+
+import LoginPage from './containers/LoginPage.jsx';
+import TaskListsPage from './containers/TaskListsPage.jsx';
+
 
 window.handleGoogleApiLoaded = () => {
    store.dispatch(SessionActions.authorize(false, renderApp));
@@ -21,6 +26,9 @@ function renderApp() {
                <Route path='/login' component={LoginPage} />
                <Route component={LoggedInLayout} onEnter={requireAuth}>
                   <Route path='/about' component={AboutPage} />
+                  <Route path='/lists' component={TaskListsPage}>
+
+                  </Route>
                </Route>
             </Route>
          </Router>

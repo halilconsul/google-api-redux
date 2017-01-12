@@ -19,5 +19,10 @@ export default {
             }
          );
       });
+   },
+
+   listTaskLists() {
+      const request = gapi.client.tasks.tasklists.list();
+      return request;
    }
 }
