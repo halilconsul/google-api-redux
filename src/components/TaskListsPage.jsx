@@ -9,6 +9,7 @@ import HomeButton from 'material-ui/svg-icons/action/home';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import ExitButton from 'material-ui/svg-icons/action/exit-to-app';
 import AddButton from 'material-ui/svg-icons/content/add-circle-outline';
+import './TaskListsPage.scss';
 
 const TaskListsPage = props => (
    <div className="TaskListsPage">
@@ -41,6 +42,7 @@ const TaskListsPage = props => (
                <ListItem
                   primaryText="Create new task"
                   leftIcon={<AddButton />}
+                  onClick={props.onAddTaskList}
                />
                <ListItem
                   primaryText="Log out"
@@ -49,12 +51,17 @@ const TaskListsPage = props => (
             </List>
          </div>
       </MuiThemeProvider>
+      <div className="TaskListsPage__children">
+         {props.children}
+      </div>
    </div>
 );
 
 TaskListsPage.propTypes = {
    taskLists: React.PropTypes.array,
-   onRouteChange: React.PropTypes.func
+   children: React.PropTypes.object,
+   onRouteChange: React.PropTypes.func,
+   onAddTaskList: React.PropTypes.func
 }
 
 export default TaskListsPage;

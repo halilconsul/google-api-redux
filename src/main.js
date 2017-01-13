@@ -12,7 +12,7 @@ import AboutPage from './components/AboutPage.jsx';
 
 import LoginPage from './containers/LoginPage.jsx';
 import TaskListsPage from './containers/TaskListsPage.jsx';
-
+import TasksPage from './containers/TasksPage.jsx';
 
 window.handleGoogleApiLoaded = () => {
    store.dispatch(SessionActions.authorize(false, renderApp));
@@ -27,7 +27,7 @@ function renderApp() {
                <Route component={LoggedInLayout} onEnter={requireAuth}>
                   <Route path='/about' component={AboutPage} />
                   <Route path='/lists' component={TaskListsPage}>
-
+                     <Route path='/lists/:id' component={TasksPage} />
                   </Route>
                </Route>
             </Route>

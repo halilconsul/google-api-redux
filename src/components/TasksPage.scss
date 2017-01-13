@@ -1,0 +1,20 @@
+.TasksPage {
+   padding: 16px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   width: 100%;
+
+   .TasksPage__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+   }
+
+   .TasksPage__tasks {
+      width: 100%;
+      max-width: 1000px;
+      padding: 35px 10px;
+   }
+}

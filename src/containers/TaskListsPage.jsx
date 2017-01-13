@@ -4,23 +4,61 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router';
 import TaskListsActions from '../actions/TaskListsActions.js';
 import TaskListsPage from '../components/TaskListsPage.jsx';
+import TaskListCreateModal from '../components/TaskListCreateModal.jsx';
 
 class TaskListsPageContainer extends React.Component {
+   constructor() {
+      super();
+      this.state = {
+         isCreatingTaskList: false
+      }
+   }
+
    componentWillMount() {
       this.props.TaskListsActions.loadTaskLists();
    }
 
    changeRoute(taskId) {
       this.props.router.push(`/lists/${taskId}`);
-      // console.log(taskId);
+   }
+
+   handleTaskListSubmit(taskList) {
+      this.props.TaskListsActions.createTaskList(taskList);
+      this.closeModal();
+   }
+
+   handleAddTaskList() {
+      this.openModal();
+   }
+
+   handleTaskListCreateModalClose() {
+      this.closeModal();
+   }
+
+   openModal() {
+      this.setState({ isCreatingTaskList: true });
+   }
+
+   closeModal() {
+      this.setState({ isCreatingTaskList: false });
    }
 
    render() {
       return (
-         <TaskListsPage
-            taskLists={this.props.taskLists}
-            onRouteChange={this.changeRoute.bind(this)}
-         />
+         <div>
+            <TaskListsPage
+               taskLists={this.props.taskLists}
+               children={this.props.children}
+               onRouteChange={this.changeRoute.bind(this)}
+               onAddTaskList={this.handleAddTaskList.bind(this)}
+            />
+            <TaskListCreateModal
+               isOpen={this.state.isCreatingTaskList}
+               onSubmit={this.handleTaskListSubmit.bind(this)}
+               onClose={this.handleTaskListCreateModalClose.bind(this)}
+            />
+         </div>
+
       );
    }
 }
@@ -39,6 +77,7 @@ function mapDispatchToProps(dispatch) {
 
 TaskListsPageContainer.propTypes = {
    taskLists: React.PropTypes.array,
+   children: React.PropTypes.object,
    TaskListsActions: React.PropTypes.object
 }
 

@@ -13,7 +13,7 @@ function formatTaskList(data) {
 
 export default function reducer(state=initialState, action) {
    switch (action.type) {
-      case 'TASK_LIST_LOAD_FULFILLED': {
+      case 'TASK_LISTS_LOAD_FULFILLED': {
          const { items } = action.payload.result;
          return {
             ...state,
@@ -22,10 +22,21 @@ export default function reducer(state=initialState, action) {
       }
          break;
 
-      case 'TASK_LIST_LOAD_REJECTED': {
+      case 'TASK_LISTS_LOAD_REJECTED': {
          return {
             ...state,
             taskLists: []
+         }
+      }
+         break;
+
+      case 'TASK_LIST_CREATE_FULFILLED': {
+         const newTask = formatTaskList(action.payload.result);
+         const allTasks = [...state.taskLists];
+         allTasks.unshift(newTask);
+         return {
+            ...state,
+            taskLists: allTasks
          }
       }
 

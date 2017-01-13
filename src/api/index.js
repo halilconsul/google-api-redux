@@ -24,5 +24,29 @@ export default {
    listTaskLists() {
       const request = gapi.client.tasks.tasklists.list();
       return request;
+   },
+
+   insertTaskList({ title }) {
+      const request = gapi.client.tasks.tasklists.insert({
+         title: title
+      });
+      return request;
+   },
+
+   listTasks(taskListId) {
+      const request = gapi.client.tasks.tasks.list({
+         tasklist: taskListId
+      });
+      return request;
+   },
+
+   updateTask({ taskListId, taskId, ...params }) {
+      const request = gapi.client.tasks.tasks.update({
+         tasklist: taskListId,
+         task: taskId,
+         id: taskId,
+         ...params
+      });
+      return request;
    }
 }
