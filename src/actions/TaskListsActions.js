@@ -16,6 +16,33 @@ const TaskListsActions = {
          type: AppConstants.TASK_LIST_CREATE,
          payload: request
       }
+   },
+
+   deleteTaskList(params) {
+      return function(dispatch) {
+         dispatch({
+            type: AppConstants.TASK_LIST_DELETE_PENDING,
+            payload: params.taskListId
+         });
+         api.deleteTaskList({
+            taskListId: params.taskListId
+         })
+         .then(response => {
+            dispatch({
+               type: AppConstants.TASK_LIST_DELETE_FULFILLED,
+               payload: {
+                  'taskListId': params.taskListId,
+                  response
+               }
+            });
+         })
+         .catch(err => {
+            dispatch({
+               type: AppConstants.TASK_LIST_DELETE_REJECTED,
+               payload: err
+            });
+         });
+      }
    }
 }
 

@@ -9,9 +9,7 @@ import TaskListCreateModal from '../components/TaskListCreateModal.jsx';
 class TaskListsPageContainer extends React.Component {
    constructor() {
       super();
-      this.state = {
-         isCreatingTaskList: false
-      }
+      this.state = { isCreatingTaskList: false }
    }
 
    componentWillMount() {
@@ -24,22 +22,14 @@ class TaskListsPageContainer extends React.Component {
 
    handleTaskListSubmit(taskList) {
       this.props.TaskListsActions.createTaskList(taskList);
-      this.closeModal();
+      this.handleTaskListCreateModalClose();
    }
 
    handleAddTaskList() {
-      this.openModal();
-   }
-
-   handleTaskListCreateModalClose() {
-      this.closeModal();
-   }
-
-   openModal() {
       this.setState({ isCreatingTaskList: true });
    }
 
-   closeModal() {
+   handleTaskListCreateModalClose() {
       this.setState({ isCreatingTaskList: false });
    }
 
@@ -58,7 +48,6 @@ class TaskListsPageContainer extends React.Component {
                onClose={this.handleTaskListCreateModalClose.bind(this)}
             />
          </div>
-
       );
    }
 }
@@ -78,6 +67,7 @@ function mapDispatchToProps(dispatch) {
 TaskListsPageContainer.propTypes = {
    taskLists: React.PropTypes.array,
    children: React.PropTypes.object,
+   router: React.PropTypes.object.isRequired,
    TaskListsActions: React.PropTypes.object
 }
 

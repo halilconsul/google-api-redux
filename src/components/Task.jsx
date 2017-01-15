@@ -1,48 +1,103 @@
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Checkbox from 'material-ui/Checkbox';
-import IconButton from 'material-ui/IconButton/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import AddButton from 'material-ui/svg-icons/content/add-circle-outline';
-import MenuIcon from 'material-ui/svg-icons/navigation/more-vert';
 import ContentDelete from 'material-ui/svg-icons/action/delete';
 import ContentEdit from 'material-ui/svg-icons/editor/mode-edit';
 import './Task.scss';
 
+const ENTER_KEY = 13;
+const ESC_KEY = 27;
+
 class Task extends React.Component {
+   constructor() {
+      super();
+      this.state = { isEditing: false }
+   }
+
    handleCheck() {
       this.props.onStatusChange({
          isCompleted: !this.props.isCompleted
       });
    }
 
+   handleEdit() {
+      this.setState({ isEditing: true }, this.focusInput);
+   }
+
+   handleSave() {
+      this.props.onUpdate({ text: this.input.value });
+      this.handleEditorClose();
+   }
+
+   handleKeyDown(e) {
+      if (e.keyCode === ENTER_KEY) {
+         this.handleSave();
+      }
+      if (e.keyCode === ESC_KEY) {
+         this.handleEditorClose();
+      }
+   }
+
+   handleEditorClose() {
+      this.setState({ isEditing: false });
+   }
+
+   focusInput() {
+      this.input.focus();
+   }
+
    render() {
       return (
          <MuiThemeProvider>
-            <div className="Task">
-               <Checkbox
-                  className="Task__checkbox"
-                  checked={this.props.isCompleted}
-                  onCheck={this.handleCheck.bind(this)}
-               />
-               <div className="Task__text">
-                  {this.props.text}
-               </div>
-                  <RaisedButton
-                     className="Task_buttons"
-                     primary={true}
-                     icon={<ContentEdit/>}
-                  />
-                  <RaisedButton
-                     className="Task_buttons"
-                     secondary={true}
-                     icon={<ContentDelete/>}
-                  />
-            </div>
+            {
+               this.state.isEditing
+               ?
+                  <div className="Task Task__editing">
+                     <input
+                        type="text"
+                        className="Task__input"
+                        defaultValue={this.props.text}
+                        ref={c => this.input = c}
+                        onKeyDown={this.handleKeyDown.bind(this)}
+                     />
+                     <RaisedButton
+                        className="Task_buttons"
+                        primary={true}
+                        label='Save'
+                        onClick={this.handleSave.bind(this)}
+                     />
+                     <RaisedButton
+                        className="Task_buttons"
+                        label='Cancel'
+                        onClick={this.handleEditorClose.bind(this)}
+                     />
+                  </div>
+               :
+                  <div className="Task">
+                     <Checkbox
+                        className="Task__checkbox"
+                        checked={this.props.isCompleted}
+                        onCheck={this.handleCheck.bind(this)}
+                     />
+                     <div className="Task__text" onDoubleClick={this.handleEdit.bind(this)}>
+                        {this.props.text}
+                     </div>
+                        <RaisedButton
+                           className="Task_buttons"
+                           primary={true}
+                           icon={<ContentEdit/>}
+                           onClick={this.handleEdit.bind(this)}
+                        />
+                        <RaisedButton
+                           className="Task_buttons"
+                           secondary={true}
+                           icon={<ContentDelete/>}
+                           onClick={this.props.onDelete}
+                        />
+                  </div>
+            }
          </MuiThemeProvider>
       )
    }
@@ -53,7 +108,9 @@ Task.propTypes = {
    note: React.PropTypes.string,
    due: React.PropTypes.string,
    isCompleted: React.PropTypes.bool,
-   onStatusChange: React.PropTypes.func
+   onStatusChange: React.PropTypes.func,
+   onUpdate: React.PropTypes.func,
+   onDelete: React.PropTypes.func
 }
 
 

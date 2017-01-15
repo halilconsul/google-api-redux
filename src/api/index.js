@@ -33,6 +33,15 @@ export default {
       return request;
    },
 
+   deleteTaskList({ taskListId }) {
+      const request = gapi.client.tasks.tasklists.delete({
+         tasklist: taskListId
+      });
+      return new Promise((resolve, reject) => {
+         request.execute(resp => resolve(resp));
+      });
+   },
+
    listTasks(taskListId) {
       const request = gapi.client.tasks.tasks.list({
          tasklist: taskListId
@@ -47,6 +56,27 @@ export default {
          id: taskId,
          ...params
       });
+      return new Promise((resolve, reject) => {
+         request.execute(resp => resolve(resp));
+      });
+   },
+
+   insertTask({ taskListId, title }) {
+      const request = gapi.client.tasks.tasks.insert({
+         tasklist: taskListId,
+         title: title
+      });
       return request;
+   },
+
+   deleteTask({ taskListId, taskId }) {
+      const request = gapi.client.tasks.tasks.delete({
+         tasklist: taskListId,
+         task: taskId,
+         id: taskId
+      });
+      return new Promise((resolve, reject) => {
+         request.execute(resp => resolve(resp));
+      });
    }
 }

@@ -10,9 +10,7 @@ const ESC_KEY = 27;
 class TaskListCreateModal extends React.Component {
    constructor() {
       super();
-      this.state = {
-         name: ''
-      }
+      this.state = { name: '' }
    }
 
    handleSubmit() {
