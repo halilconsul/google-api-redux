@@ -63,7 +63,7 @@ class TaskCreateModal extends React.Component {
       return (
          <MuiThemeProvider>
             <Dialog
-               contentStyle={{ maxWidth: 400 }}
+               contentStyle={{ maxWidth: 400, height: 350 }}
                actions={actions}
                open={isOpen}
                onRequestClose={this.handleClose.bind(this)}

@@ -1,7 +1,8 @@
 import AppConstants from '../constants/AppConstants.js';
 
 const initialState = {
-   taskLists: []
+   taskLists: [],
+   currentTaskListId: ''
 }
 
 function formatTaskList(data) {
@@ -13,7 +14,7 @@ function formatTaskList(data) {
 
 export default function(state=initialState, action) {
    switch (action.type) {
-      case 'TASK_LISTS_LOAD_FULFILLED': {
+      case `${AppConstants.TASK_LISTS_LOAD}_FULFILLED`: {
          const { items } = action.payload.result;
          return {
             ...state,
@@ -22,7 +23,7 @@ export default function(state=initialState, action) {
       }
          break;
 
-      case 'TASK_LISTS_LOAD_REJECTED': {
+      case `${AppConstants.TASK_LISTS_LOAD}_REJECTED`: {
          return {
             ...state,
             taskLists: []
@@ -30,13 +31,34 @@ export default function(state=initialState, action) {
       }
          break;
 
-      case 'TASK_LIST_CREATE_FULFILLED': {
+      case `${AppConstants.TASK_LIST_LOAD}_FULFILLED`: {
+         const { id: currentTaskListId } = action.payload.result;
+         return {
+            ...state,
+            currentTaskListId
+         }
+      }
+         break;
+
+      case `${AppConstants.TASK_LIST_CREATE}_FULFILLED`: {
          const newTask = formatTaskList(action.payload.result);
          const allTasks = [...state.taskLists];
          allTasks.unshift(newTask);
          return {
             ...state,
             taskLists: allTasks
+         }
+      }
+         break;
+
+      case `${AppConstants.TASK_LIST_UPDATE}_FULFILLED`: {
+         const { id: taskListId } = action.payload.result;
+         const alltaskLists = [...state.taskLists];
+         const updatedTaskList = alltaskLists.findIndex(task => task.id === taskListId);
+         alltaskLists[updatedTaskList] = formatTaskList(action.payload.result);
+         return {
+            ...state,
+            taskLists: alltaskLists
          }
       }
          break;

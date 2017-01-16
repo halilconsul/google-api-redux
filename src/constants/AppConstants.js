@@ -4,7 +4,9 @@ export default keyMirror({
    SESSION_AUTHORIZE              : null,
 
    TASK_LISTS_LOAD                : null,
+   TASK_LIST_LOAD                 : null,
    TASK_LIST_CREATE               : null,
+   TASK_LIST_UPDATE               : null,
    TASK_LIST_DELETE_PENDING       : null,
    TASK_LIST_DELETE_FULFILLED     : null,
    TASK_LIST_DELETE_REJECTED      : null,

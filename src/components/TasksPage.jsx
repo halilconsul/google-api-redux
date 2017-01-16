@@ -4,65 +4,111 @@ import FlatButton from 'material-ui/FlatButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentDelete from 'material-ui/svg-icons/action/delete';
 import CircularProgress from 'material-ui/CircularProgress';
+import IconButton from 'material-ui/IconButton';
+import ContentEdit from 'material-ui/svg-icons/editor/mode-edit';
 import Task from './Task.jsx';
 import './TasksPage.scss';
 
-const TasksPage = props => (
-   <MuiThemeProvider>
-      <div className="TasksPage">
-         <div className="TasksPage__header">
-            <h3 className="TasksPage__title">TaskLists</h3>
-               <div className="TasksPage__tools">
-                  <FlatButton
-                     label="Add task"
-                     labelPosition="after"
-                     primary={true}
-                     icon={<ContentAdd />}
-                     onClick={props.onTaskAdd}
-                  />
-                  <FlatButton
-                     label="Delete task"
-                     labelPosition="after"
-                     secondary={true}
-                     icon={<ContentDelete />}
-                     onClick={props.onTaskListDelete}
-                  />
-               </div>
-         </div>
-         {
-            props.isLoadingTask
-            ?
-               <CircularProgress size={4} />
-            :
-               <div className="TasksPage__tasks">
+const ENTER_KEY = 13;
+const ESC_KEY = 27;
+
+class TasksPage extends React.Component {
+   constructor() {
+      super();
+      this.state = { isEditingTaskList: false }
+   }
+
+   handleEditTaskList() {
+      this.setState({ isEditingTaskList: true }, () => this.input.focus());
+   }
+
+   handleKeyDown(e) {
+      if (e.keyCode === ENTER_KEY) {
+         this.props.onTaskListEdit({
+            name: this.input.value
+         });
+         this.setState({ isEditingTaskList: false });
+      }
+      if (e.keyCode === ESC_KEY) {
+         this.setState({ isEditingTaskList: false });
+      }
+   }
+
+   render() {
+      return (
+         <MuiThemeProvider>
+            <div className="TasksPage">
+               <div className="TasksPage__header">
                   {
-                     props.tasks.map(task =>
-                        <Task
-                           key={task.id}
-                           text={task.text}
-                           note={task.note}
-                           due={task.due}
-                           isCompleted={task.isCompleted}
-                           onStatusChange={props.onTaskStatusChange.bind(null, task.id)}
-                           onUpdate={props.onTaskUpdate.bind(null, task.id)}
-                           onDelete={props.onTaskDelete.bind(null, task.id)}
+                     this.state.isEditingTaskList
+                     ?
+                        <input
+                           type="text"
+                           ref={c => this.input = c}
+                           defaultValue={this.props.currentTaskList[0].name}
+                           onKeyDown={this.handleKeyDown.bind(this)}
                         />
-                     )
+                     :
+                        <h2 className="TasksPage__title" onClick={this.handleEditTaskList.bind(this)}>
+                           {this.props.currentTaskList[0] ? this.props.currentTaskList[0].name : null}
+                        </h2>
                   }
+                  <div className="TasksPage__tools">
+                     <FlatButton
+                        label="Add task"
+                        labelPosition="after"
+                        primary={true}
+                        icon={<ContentAdd />}
+                        onClick={this.props.onTaskAdd}
+                     />
+                     <FlatButton
+                        label="Delete task"
+                        labelPosition="after"
+                        secondary={true}
+                        icon={<ContentDelete />}
+                        onClick={this.props.onTaskListDelete}
+                     />
+                  </div>
                </div>
-         }
-      </div>
-   </MuiThemeProvider>
-);
+               {
+                  this.props.isLoadingTask
+                  ?
+                     <CircularProgress size={4} />
+                  :
+                     <div className="TasksPage__tasks">
+                        {
+                           this.props.tasks.map(task =>
+                              <Task
+                                 key={task.id}
+                                 text={task.text}
+                                 note={task.note}
+                                 due={task.due}
+                                 isCompleted={task.isCompleted}
+                                 onStatusChange={this.props.onTaskStatusChange.bind(null, task.id)}
+                                 onUpdate={this.props.onTaskUpdate.bind(null, task.id)}
+                                 onDelete={this.props.onTaskDelete.bind(null, task.id)}
+                              />
+                           )
+                        }
+                     </div>
+               }
+            </div>
+         </MuiThemeProvider>
+      )
+   }
+}
 
 TasksPage.propTypes = {
    tasks: React.PropTypes.array,
+   taskList: React.PropTypes.object,
+   currentTaskList: React.PropTypes.array,
    isLoadingTask: React.PropTypes.bool,
    onTaskAdd: React.PropTypes.func,
    onTaskDelete: React.PropTypes.func,
    onTaskStatusChange: React.PropTypes.func,
    onTaskUpdate: React.PropTypes.func,
-   onTaskListDelete: React.PropTypes.func
+   onTaskListDelete: React.PropTypes.func,
+   onTaskListEdit: React.PropTypes.func
 }
 
 export default TasksPage;

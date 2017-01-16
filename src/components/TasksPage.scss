@@ -10,6 +10,14 @@
       justify-content: space-between;
       align-items: center;
       width: 100%;
+
+      .TasksPage__title {
+         color: grey;
+         margin-left: 150px;
+         display: flex;
+         align-items: center;
+         cursor: pointer;
+      }
    }
 
    .TasksPage__tasks {

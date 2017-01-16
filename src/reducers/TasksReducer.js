@@ -18,16 +18,15 @@ function formatTasks(data) {
 
 export default function(state=initialState, action) {
    switch (action.type) {
-      case 'TASKS_LOAD_PENDING': {
+      case `${AppConstants.TASKS_LOAD}_PENDING`: {
          return {
             ...state,
             isLoading: true
          }
       }
-
          break;
 
-      case 'TASKS_LOAD_FULFILLED': {
+      case `${AppConstants.TASKS_LOAD}_FULFILLED`: {
          const { items } = action.payload.result;
          if (items) {
             return {
@@ -45,7 +44,7 @@ export default function(state=initialState, action) {
       }
          break;
 
-      case 'TASKS_LOAD_REJECTED': {
+      case `${AppConstants.TASKS_LOAD}_REJECTED`: {
          return {
             ...state,
             tasks: [],
@@ -71,7 +70,7 @@ export default function(state=initialState, action) {
       case AppConstants.TASK_UPDATE_FULFILLED: {
          const { id } = action.payload.result;
          const allTasks = [...state.tasks];
-         const updatedTaskIndex = allTasks.findIndex(task => task.id == id);
+         const updatedTaskIndex = allTasks.findIndex(task => task.id === id);
          allTasks[updatedTaskIndex] = formatTasks(action.payload.result);
          return {
             ...state,
@@ -79,6 +78,11 @@ export default function(state=initialState, action) {
          }
       }
          break;
+
+         // function getCurrentTaskList(allTasks, taskListId) {
+         //    const newTask = allTasks.filter(task => task.id === taskListId);
+         //    return newTask;
+         // }
 
       case AppConstants.TASK_UPDATE_REJECTED: {
          return {
@@ -88,7 +92,7 @@ export default function(state=initialState, action) {
       }
          break;
 
-      case 'TASK_CREATE_FULFILLED': {
+      case `${AppConstants.TASK_CREATE}_FULFILLED`: {
          const newTask = formatTasks(action.payload.result);
          const allTasks = [...state.tasks];
          allTasks.unshift(newTask);

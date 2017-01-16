@@ -6,6 +6,7 @@ import TaskListsActions from '../actions/TaskListsActions.js';
 import TasksActions from '../actions/TasksActions.js';
 import TasksPage from '../components/TasksPage.jsx';
 import TaskCreateModal from '../components/TaskCreateModal.jsx';
+import currentTaskListSelector from '../selectors/index.js';
 
 class TasksPageContainer extends React.Component {
    constructor() {
@@ -14,13 +15,23 @@ class TasksPageContainer extends React.Component {
    }
 
    componentWillMount() {
-      this.props.TasksActions.loadTasks(this.props.params.id);
+      this.loadTaskList(this.props.params.id);
+      this.loadTasks(this.props.params.id);
    }
 
    componentWillReceiveProps(nextProps) {
       if (nextProps.params.id !== this.props.params.id) {
-         this.props.TasksActions.loadTasks(nextProps.params.id);
+         this.loadTaskList(nextProps.params.id);
+         this.loadTasks(nextProps.params.id);
       }
+   }
+
+   loadTasks(taskListId) {
+      this.props.TasksActions.loadTasks(taskListId);
+   }
+
+   loadTaskList(taskListId) {
+      this.props.TaskListsActions.loadTaskList(taskListId);
    }
 
    handleTaskStatusChange(taskId, { isCompleted }) {
@@ -69,12 +80,21 @@ class TasksPageContainer extends React.Component {
       this.props.router.push('/lists');
    }
 
+   handleTaskListEdit({ name }) {
+      this.props.TaskListsActions.updateTaskList({
+         taskListId: this.props.params.id,
+         name
+      });
+   }
+
    render() {
       return (
          <div>
             <TasksPage
                tasks={this.props.tasks}
+               currentTaskList={this.props.currentTaskList}
                isLoadingTask={this.props.isLoading}
+               onTaskListEdit={this.handleTaskListEdit.bind(this)}
                onTaskListDelete={this.handleTaskListDelete.bind(this)}
                onTaskAdd={this.handleTaskAdd.bind(this)}
                onTaskDelete={this.handleTaskDelete.bind(this)}
@@ -94,7 +114,8 @@ class TasksPageContainer extends React.Component {
 function mapStateToProps(store) {
    return {
       tasks: store.tasks.tasks,
-      isLoading: store.tasks.isLoading
+      isLoading: store.tasks.isLoading,
+      currentTaskList: currentTaskListSelector(store)
    }
 }
 

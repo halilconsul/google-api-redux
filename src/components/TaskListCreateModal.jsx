@@ -26,10 +26,10 @@ class TaskListCreateModal extends React.Component {
    }
 
    handleKeyDown(e) {
-      if (e.keyCode == ENTER_KEY) {
+      if (e.keyCode === ENTER_KEY) {
          this.handleSubmit();
       }
-      if (e.keyCode == ESC_KEY) {
+      if (e.keyCode === ESC_KEY) {
          this.handleClose();
       }
    }
@@ -61,7 +61,7 @@ class TaskListCreateModal extends React.Component {
       return (
          <MuiThemeProvider>
             <Dialog
-               contentStyle={{ maxWidth: 400 }}
+               contentStyle={{ maxWidth: 400, height: 350 }}
                actions={actions}
                open={isOpen}
                onRequestClose={this.handleClose.bind(this)}

@@ -1,6 +1,7 @@
 .Task {
    display: flex;
    flex-direction: row;
+   justify-content: space-between;
    align-items: center;
    width: 100%;
    margin: 0 16px;
@@ -9,11 +10,12 @@
 
    &__editing {
       display: flex;
+      justify-content: space-between;
 
       .Task__input {
-         padding: 0 40px;
-         width: 70%;
+         margin: 0 10px;
          border: none;
+         width: 70%;
 
          &:focus {
             outline: none;
@@ -30,7 +32,12 @@
       min-height: 20px;
    }
 
-   .Task_buttons {
-      margin-left: 5px;
+   .Task__control{
+
+      .Task_buttons {
+         color: pink;
+         background-color: blue;
+         // border: 1px solid grey;
+      }
    }
 }

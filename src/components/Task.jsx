@@ -5,6 +5,9 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import ContentDelete from 'material-ui/svg-icons/action/delete';
 import ContentEdit from 'material-ui/svg-icons/editor/mode-edit';
+import CompleteIcon from 'material-ui/svg-icons/action/done';
+import CancelIcon from 'material-ui/svg-icons/content/clear';
+import IconButton from 'material-ui/IconButton';
 import './Task.scss';
 
 const ENTER_KEY = 13;
@@ -62,17 +65,25 @@ class Task extends React.Component {
                         ref={c => this.input = c}
                         onKeyDown={this.handleKeyDown.bind(this)}
                      />
-                     <RaisedButton
-                        className="Task_buttons"
-                        primary={true}
-                        label='Save'
-                        onClick={this.handleSave.bind(this)}
-                     />
-                     <RaisedButton
-                        className="Task_buttons"
-                        label='Cancel'
-                        onClick={this.handleEditorClose.bind(this)}
-                     />
+                     <div className="Task__control">
+                        <IconButton
+                           tooltip="Save"
+                           tooltipPosition="bottom-right"
+                           iconStyle={{ color: 'grey' }}
+                           onClick={this.handleSave.bind(this)}
+                        >
+                           <CompleteIcon />
+                        </IconButton>
+
+                        <IconButton
+                           tooltip="Cancel"
+                           tooltipPosition="bottom-right"
+                           iconStyle={{ color: 'grey' }}
+                           onClick={this.handleEditorClose.bind(this)}
+                        >
+                           <CancelIcon />
+                        </IconButton>
+                     </div>
                   </div>
                :
                   <div className="Task">
@@ -81,21 +92,27 @@ class Task extends React.Component {
                         checked={this.props.isCompleted}
                         onCheck={this.handleCheck.bind(this)}
                      />
-                     <div className="Task__text" onDoubleClick={this.handleEdit.bind(this)}>
+                     <div className="Task__text">
                         {this.props.text}
                      </div>
-                        <RaisedButton
-                           className="Task_buttons"
-                           primary={true}
-                           icon={<ContentEdit/>}
+                     <div className="Task__control">
+                        <IconButton
+                           tooltip="Edit"
+                           tooltipPosition="bottom-right"
+                           iconStyle={{ color: 'grey' }}
                            onClick={this.handleEdit.bind(this)}
-                        />
-                        <RaisedButton
-                           className="Task_buttons"
-                           secondary={true}
-                           icon={<ContentDelete/>}
+                        >
+                           <ContentEdit />
+                        </IconButton>
+                        <IconButton
+                           tooltip="Delete"
+                           tooltipPosition="bottom-right"
+                           iconStyle={{ color: 'grey' }}
                            onClick={this.props.onDelete}
-                        />
+                        >
+                           <ContentDelete />
+                        </IconButton>
+                     </div>
                   </div>
             }
          </MuiThemeProvider>

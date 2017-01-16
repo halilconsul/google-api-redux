@@ -10,10 +10,29 @@ const TaskListsActions = {
       }
    },
 
+   loadTaskList(taskListId) {
+      const request = api.showTaskList(taskListId);
+      return {
+         type: AppConstants.TASK_LIST_LOAD,
+         payload: request
+      }
+   },
+
    createTaskList(taskList) {
       const request = api.insertTaskList({ title: taskList.name });
       return {
          type: AppConstants.TASK_LIST_CREATE,
+         payload: request
+      }
+   },
+
+   updateTaskList(params) {
+      const request = api.updateTaskList({
+         taskListId: params.taskListId,
+         title: params.name
+      });
+      return {
+         type: AppConstants.TASK_LIST_UPDATE,
          payload: request
       }
    },

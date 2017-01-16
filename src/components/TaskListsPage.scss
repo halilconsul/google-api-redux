@@ -7,6 +7,19 @@
 
    .TaskListsPage__menu {
       width: 500px;
+
+      .TaskListsPage__list {
+
+         &:hover .TaskListsPage__edit {
+            // visibility: visible;
+         }
+
+         .TaskListsPage__edit {
+            // background-color: blue;
+            // opacity: 0;
+            display: none;
+         }
+      }
    }
 
    .TaskListsPage__children {

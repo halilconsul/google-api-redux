@@ -38,6 +38,7 @@ class TaskListsPageContainer extends React.Component {
          <div>
             <TaskListsPage
                taskLists={this.props.taskLists}
+               currentTaskListId={this.props.params.id}
                children={this.props.children}
                onRouteChange={this.changeRoute.bind(this)}
                onAddTaskList={this.handleAddTaskList.bind(this)}
