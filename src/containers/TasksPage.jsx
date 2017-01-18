@@ -5,7 +5,7 @@ import { withRouter } from 'react-router';
 import TaskListsActions from '../actions/TaskListsActions.js';
 import TasksActions from '../actions/TasksActions.js';
 import TasksPage from '../components/TasksPage.jsx';
-import TaskCreateModal from '../components/TaskCreateModal.jsx';
+import TaskListCreateModal from '../components/TaskListCreateModal.jsx';
 import currentTaskListSelector from '../selectors/currentTaskList.js';
 
 class TasksPageContainer extends React.Component {
@@ -47,6 +47,7 @@ class TasksPageContainer extends React.Component {
    }
 
    handleTaskSubmit(task) {
+      console.log(task);
       this.props.TasksActions.createTask({
          taskListId: this.props.params.id,
          ...task
@@ -102,7 +103,7 @@ class TasksPageContainer extends React.Component {
                onTaskStatusChange={this.handleTaskStatusChange.bind(this)}
                onTaskUpdate={this.handleTaskUpdate.bind(this)}
             />
-            <TaskCreateModal
+            <TaskListCreateModal
                isOpen={this.state.isCreatingTask}
                onSubmit={this.handleTaskSubmit.bind(this)}
                onClose={this.handleTaskCreateModalClose.bind(this)}

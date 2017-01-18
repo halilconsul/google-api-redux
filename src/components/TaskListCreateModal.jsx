@@ -66,7 +66,7 @@ class TaskListCreateModal extends React.Component {
                open={isOpen}
                onRequestClose={this.handleClose.bind(this)}
             >
-               <h3 className="TaskListCreateModal">Add taskList</h3>
+               <h3 className="TaskListCreateModal">Add task</h3>
                <TextField
                   fullWidth
                   value={name}
