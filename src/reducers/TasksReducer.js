@@ -1,31 +1,16 @@
 import AppConstants from '../constants/AppConstants.js';
-
+import { formatTasks, getErrorMessageByCode, deleteTask, updateTask } from '../utils/index.js';
 const initialState = {
    tasks: [],
    isLoading: true,
    error: null
 }
 
-function formatTasks(data) {
-   return {
-      id: data.id,
-      text: data.title,
-      notes: data.notes,
-      dueTime: data.due ? new Date(data.due) : '',
-      isCompleted: data.status === 'completed',
-      position: data.position
-   }
-}
-
-function getErrorMessageByCode(code) {
-   const errorMessages = {
-      400: 'Cannot load taskList (what da fuck)'
-   };
-   return errorMessages[code] || 'Something bad happened'
-}
-
 export default function(state=initialState, action) {
    switch (action.type) {
+
+// ======= __TASKS_LOAD__ ======= //
+
       case `${AppConstants.TASKS_LOAD}_PENDING`: {
          return {
             ...state,
@@ -65,11 +50,16 @@ export default function(state=initialState, action) {
          }
             break;
 
+// ======= __TASK_UPDATE__ ======= //
+
       case AppConstants.TASK_UPDATE_PENDING: {
          const { taskId } = action.payload;
          const { isCompleted } = action.payload;
          const allTasks = [...state.tasks];
          const updatedTask = allTasks.findIndex(task => task.id === taskId);
+         // if the object has 'isCompleted', it will be replaced
+         // if it doesn't, nothing will be changed
+         // the same thing with 'text'
          allTasks[updatedTask].isCompleted = isCompleted !== undefined ? isCompleted : allTasks[updatedTask].isCompleted;
          allTasks[updatedTask].text = action.payload.text || allTasks[updatedTask].text;
          return {
@@ -80,21 +70,14 @@ export default function(state=initialState, action) {
          break;
 
       case AppConstants.TASK_UPDATE_FULFILLED: {
-         const { id } = action.payload.result;
+         const newTask = action.payload.result;
          const allTasks = [...state.tasks];
-         const updatedTaskIndex = allTasks.findIndex(task => task.id === id);
-         allTasks[updatedTaskIndex] = formatTasks(action.payload.result);
          return {
             ...state,
-            tasks: allTasks
+            tasks: updateTask(allTasks, newTask)
          }
       }
          break;
-
-         // function getCurrentTaskList(allTasks, taskListId) {
-         //    const newTask = allTasks.filter(task => task.id === taskListId);
-         //    return newTask;
-         // }
 
       case AppConstants.TASK_UPDATE_REJECTED: {
          return {
@@ -103,6 +86,8 @@ export default function(state=initialState, action) {
          }
       }
          break;
+
+// ======= __TASK_CREATE__ ======= //
 
       case `${AppConstants.TASK_CREATE}_FULFILLED`: {
          const newTask = formatTasks(action.payload.result);
@@ -115,13 +100,14 @@ export default function(state=initialState, action) {
       }
          break;
 
+// ======= __TASK_DELETE__ ======= //
+
       case AppConstants.TASK_DELETE_PENDING: {
          const { taskId } = action.payload;
          const allTasks = [...state.tasks];
-         const newTasks = allTasks.filter(task => task.id !== taskId);
          return {
             ...state,
-            tasks: newTasks
+            tasks: deleteTask(allTasks, taskId)
          }
       }
          break;
@@ -129,10 +115,9 @@ export default function(state=initialState, action) {
       case AppConstants.TASK_DELETE_FULFILLED: {
          const { taskId } = action.payload;
          const allTasks = [...state.tasks];
-         const newTasks = allTasks.filter(task => task.id !== taskId);
          return {
             ...state,
-            tasks: newTasks
+            tasks: deleteTask(allTasks, taskId)
          }
       }
          break;

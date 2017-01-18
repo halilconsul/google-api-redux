@@ -31,7 +31,7 @@ const TaskListsActions = {
          dispatch({
             type: AppConstants.TASK_LIST_UPDATE_PENDING,
             payload: {
-               'taskListId': params.taskListId,
+               'id': params.taskListId,
                'title': params.name
             }
          });

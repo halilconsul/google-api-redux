@@ -72,7 +72,7 @@ class Task extends React.Component {
                <CancelIcon />
             </IconButton>
          </div>
-      )
+      );
    }
 
    renderTaskEdited() {
@@ -110,7 +110,7 @@ class Task extends React.Component {
                <ContentDelete />
             </IconButton>
          </div>
-      )
+      );
    }
 
    renderTaskCompleted() {
@@ -131,9 +131,9 @@ class Task extends React.Component {
 
    renderTask() {
       if (this.state.isEditing) {
-         return this.renderTaskEdited()
+         return this.renderTaskEdited();
       } else {
-         return this.renderTaskCompleted()
+         return this.renderTaskCompleted();
       }
    }
 

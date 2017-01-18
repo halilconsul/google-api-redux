@@ -42,9 +42,21 @@ class TaskListCreateModal extends React.Component {
       this.setState({ name: e.target.value });
    }
 
-   render() {
-      const { name } = this.state;
-      const { isOpen } = this.props;
+   renderTextField() {
+      return (
+         <TextField
+            fullWidth
+            value={this.state.name}
+            ref={c => this.taskInput = c}
+            hintText='e.g. movies to watch'
+            floatingLabelText='Enter task name'
+            onChange={this.handleTextChange.bind(this)}
+            onKeyDown={this.handleKeyDown.bind(this)}
+         />
+      );
+   }
+
+   renderDialog() {
       const actions = [
          <FlatButton
             label='Cancel'
@@ -53,30 +65,27 @@ class TaskListCreateModal extends React.Component {
          <FlatButton
             label='Submit'
             primary={true}
-            disabled={!name}
+            disabled={!this.state.name}
             onClick={this.handleSubmit.bind(this)}
          />
       ];
+      return (
+         <Dialog
+            contentStyle={{ maxWidth: 400, height: 350 }}
+            actions={actions}
+            open={this.props.isOpen}
+            onRequestClose={this.handleClose.bind(this)}
+         >
+            <h3 className="TaskListCreateModal">Add task</h3>
+            {this.renderTextField()}
+         </Dialog>
+      );
+   }
 
+   render() {
       return (
          <MuiThemeProvider>
-            <Dialog
-               contentStyle={{ maxWidth: 400, height: 350 }}
-               actions={actions}
-               open={isOpen}
-               onRequestClose={this.handleClose.bind(this)}
-            >
-               <h3 className="TaskListCreateModal">Add task</h3>
-               <TextField
-                  fullWidth
-                  value={name}
-                  ref={c => this.taskInput = c}
-                  hintText='e.g. movies to watch'
-                  floatingLabelText='Enter tasklist name'
-                  onChange={this.handleTextChange.bind(this)}
-                  onKeyDown={this.handleKeyDown.bind(this)}
-               />
-            </Dialog>
+            {this.renderDialog()}
          </MuiThemeProvider>
       );
    }
