@@ -4,8 +4,6 @@ import FlatButton from 'material-ui/FlatButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import ContentDelete from 'material-ui/svg-icons/action/delete';
 import CircularProgress from 'material-ui/CircularProgress';
-import IconButton from 'material-ui/IconButton';
-import ContentEdit from 'material-ui/svg-icons/editor/mode-edit';
 import Task from './Task.jsx';
 import './TasksPage.scss';
 
@@ -27,79 +25,133 @@ class TasksPage extends React.Component {
          this.props.onTaskListEdit({
             name: this.input.value
          });
-         this.setState({ isEditingTaskList: false });
+         this.closeEditing();
       }
       if (e.keyCode === ESC_KEY) {
-         this.setState({ isEditingTaskList: false });
+         this.closeEditing();
       }
    }
 
-   render() {
+   closeEditing() {
+      this.setState({ isEditingTaskList: false });
+   }
+
+   renderControlButtons() {
+      return (
+         <div className="TasksPage__tools">
+            <FlatButton
+               label="Add task"
+               labelPosition="after"
+               primary={true}
+               icon={<ContentAdd />}
+               onClick={this.props.onTaskAdd}
+            />
+            <FlatButton
+               label="Delete task"
+               labelPosition="after"
+               secondary={true}
+               icon={<ContentDelete />}
+               onClick={this.props.onTaskListDelete}
+            />
+         </div>
+      );
+   }
+
+   editedTitle() {
+      return (
+         <input
+            className="TasksPage__title-edit"
+            type="text"
+            ref={c => this.input = c}
+            defaultValue={this.props.currentTaskList[0].name}
+            onKeyDown={this.handleKeyDown.bind(this)}
+         />
+      );
+   }
+
+   completedTitle() {
+      return (
+         <h2 className="TasksPage__title" onClick={this.handleEditTaskList.bind(this)}>
+            {this.props.currentTaskList[0] ? this.props.currentTaskList[0].name : null}
+         </h2>
+      );
+   }
+
+   showLoader() {
+      return <CircularProgress size={4} />
+   }
+
+   renderTasks() {
+      return (
+         this.props.tasks.map(task =>
+            <Task
+               key={task.id}
+               text={task.text}
+               note={task.note}
+               due={task.due}
+               isCompleted={task.isCompleted}
+               onStatusChange={this.props.onTaskStatusChange.bind(null, task.id)}
+               onUpdate={this.props.onTaskUpdate.bind(null, task.id)}
+               onDelete={this.props.onTaskDelete.bind(null, task.id)}
+            />
+         )
+      );
+   }
+
+   loadTasks() {
+      if (this.props.isLoadingTask) {
+         return this.showLoader();
+      } else {
+         return this.renderTasks();
+      }
+   }
+
+   renderHeaderTitle() {
+      if (this.state.isEditingTaskList) {
+         return this.editedTitle();
+      } else {
+         return this.completedTitle();
+      }
+   }
+
+   showTasks() {
       return (
          <MuiThemeProvider>
             <div className="TasksPage">
                <div className="TasksPage__header">
-                  {
-                     this.state.isEditingTaskList
-                     ?
-                        <input
-                           type="text"
-                           ref={c => this.input = c}
-                           defaultValue={this.props.currentTaskList[0].name}
-                           onKeyDown={this.handleKeyDown.bind(this)}
-                        />
-                     :
-                        <h2 className="TasksPage__title" onClick={this.handleEditTaskList.bind(this)}>
-                           {this.props.currentTaskList[0] ? this.props.currentTaskList[0].name : null}
-                        </h2>
-                  }
-                  <div className="TasksPage__tools">
-                     <FlatButton
-                        label="Add task"
-                        labelPosition="after"
-                        primary={true}
-                        icon={<ContentAdd />}
-                        onClick={this.props.onTaskAdd}
-                     />
-                     <FlatButton
-                        label="Delete task"
-                        labelPosition="after"
-                        secondary={true}
-                        icon={<ContentDelete />}
-                        onClick={this.props.onTaskListDelete}
-                     />
-                  </div>
+                  {this.renderHeaderTitle()}
+                  {this.renderControlButtons()}
                </div>
-               {
-                  this.props.isLoadingTask
-                  ?
-                     <CircularProgress size={4} />
-                  :
-                     <div className="TasksPage__tasks">
-                        {
-                           this.props.tasks.map(task =>
-                              <Task
-                                 key={task.id}
-                                 text={task.text}
-                                 note={task.note}
-                                 due={task.due}
-                                 isCompleted={task.isCompleted}
-                                 onStatusChange={this.props.onTaskStatusChange.bind(null, task.id)}
-                                 onUpdate={this.props.onTaskUpdate.bind(null, task.id)}
-                                 onDelete={this.props.onTaskDelete.bind(null, task.id)}
-                              />
-                           )
-                        }
-                     </div>
-               }
+               <div className="TasksPage__tasks">
+                  {this.loadTasks()}
+               </div>
             </div>
          </MuiThemeProvider>
-      )
+      );
+   }
+
+   renderError() {
+      return (
+         <div className="TasksPage">
+            <div className="TasksPage__error">
+               {this.props.error}
+            </div>
+         </div>
+      );
+   }
+
+   render() {
+      if (this.props.error) {
+         return this.renderError();
+      } else {
+         return this.showTasks();
+      }
    }
 }
 
 TasksPage.propTypes = {
    tasks: React.PropTypes.array,
+   error: React.PropTypes.string,
    taskList: React.PropTypes.object,
    currentTaskList: React.PropTypes.array,
    isLoadingTask: React.PropTypes.bool,

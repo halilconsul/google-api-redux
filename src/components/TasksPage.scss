@@ -1,5 +1,15 @@
+@import '../style/variables.scss';
+
+@mixin header {
+   max-width: 250px;
+   height: 70px;
+   border: none;
+   color: $dark-silver;
+   margin-left: 40px;
+}
+
 .TasksPage {
-   padding: 16px;
+   padding: $base-padding;
    display: flex;
    flex-direction: column;
    align-items: center;
@@ -11,9 +21,15 @@
       align-items: center;
       width: 100%;
 
+      .TasksPage__title-edit {
+         @include header;
+         font-style: italic;
+         outline: none;
+         font-weight: bold;
+      }
+
       .TasksPage__title {
-         color: grey;
-         margin-left: 150px;
+         @include header;
          display: flex;
          align-items: center;
          cursor: pointer;
@@ -23,6 +39,6 @@
    .TasksPage__tasks {
       width: 100%;
       max-width: 1000px;
-      padding: 35px 10px;
+      padding: $base-padding*1.5 $base-padding/2;
    }
 }

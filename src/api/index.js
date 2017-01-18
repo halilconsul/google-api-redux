@@ -1,4 +1,4 @@
-const CLIENT_ID = '988380261093-1cn4l4jh3v7nqtlhvsq6cjlls7oip6a6.apps.googleusercontent.com';
+import { clientId } from '../config.js';
 const SCOPES = ['https://www.googleapis.com/auth/tasks', 'https://www.googleapis.com/auth/plus.me'];
 
 export default {
@@ -6,7 +6,7 @@ export default {
       return new Promise((resolve, reject) => {
          gapi.auth.authorize(
             {
-               'client_id': CLIENT_ID,
+               'client_id': clientId,
                'scope': SCOPES,
                'immediate': params.immediate,
                'cookie_policy': 'single_host_origin'
@@ -46,7 +46,9 @@ export default {
          id: taskListId,
          title: title
       });
-      return request;
+      return new Promise((resolve, reject) => {
+         request.execute(resp => resolve(resp));
+      });
    },
 
    deleteTaskList({ taskListId }) {

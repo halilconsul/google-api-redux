@@ -27,13 +27,30 @@ const TaskListsActions = {
    },
 
    updateTaskList(params) {
-      const request = api.updateTaskList({
-         taskListId: params.taskListId,
-         title: params.name
-      });
-      return {
-         type: AppConstants.TASK_LIST_UPDATE,
-         payload: request
+      return function(dispatch) {
+         dispatch({
+            type: AppConstants.TASK_LIST_UPDATE_PENDING,
+            payload: {
+               'taskListId': params.taskListId,
+               'title': params.name
+            }
+         });
+         api.updateTaskList({
+            taskListId: params.taskListId,
+            title: params.name
+         })
+         .then(response => {
+            dispatch({
+               type: AppConstants.TASK_LIST_UPDATE_FULFILLED,
+               payload: response
+            });
+         })
+         .catch(err => {
+            dispatch({
+               type: AppConstants.TASK_LIST_UPDATE_REJECTED,
+               payload: err
+            });
+         });
       }
    },
 

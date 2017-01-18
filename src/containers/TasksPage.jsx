@@ -6,7 +6,7 @@ import TaskListsActions from '../actions/TaskListsActions.js';
 import TasksActions from '../actions/TasksActions.js';
 import TasksPage from '../components/TasksPage.jsx';
 import TaskCreateModal from '../components/TaskCreateModal.jsx';
-import currentTaskListSelector from '../selectors/index.js';
+import currentTaskListSelector from '../selectors/currentTaskList.js';
 
 class TasksPageContainer extends React.Component {
    constructor() {
@@ -92,6 +92,7 @@ class TasksPageContainer extends React.Component {
          <div>
             <TasksPage
                tasks={this.props.tasks}
+               error={this.props.error}
                currentTaskList={this.props.currentTaskList}
                isLoadingTask={this.props.isLoading}
                onTaskListEdit={this.handleTaskListEdit.bind(this)}
@@ -115,6 +116,7 @@ function mapStateToProps(store) {
    return {
       tasks: store.tasks.tasks,
       isLoading: store.tasks.isLoading,
+      error: store.tasks.error,
       currentTaskList: currentTaskListSelector(store)
    }
 }
@@ -129,6 +131,7 @@ function mapDispatchToProps(dispatch) {
 TasksPageContainer.propTypes = {
    tasks: React.PropTypes.array,
    isLoading: React.PropTypes.bool,
+   error: React.PropTypes.string,
    router: React.PropTypes.object.isRequired,
    TaskListsActions: React.PropTypes.object,
    TasksActions: React.PropTypes.object

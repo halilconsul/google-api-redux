@@ -1,18 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, Route, hashHistory } from 'react-router';
-
 import store from './store/index.js';
 import SessionActions from './actions/SessionActions.js';
-
-import App from './App.jsx';
-import LoggedInLayout from './components/LoggedInLayout.jsx';
-import AboutPage from './components/AboutPage.jsx';
-
-import LoginPage from './containers/LoginPage.jsx';
-import TaskListsPage from './containers/TaskListsPage.jsx';
-import TasksPage from './containers/TasksPage.jsx';
+import routes from './routes/index.js';
 
 window.handleGoogleApiLoaded = () => {
    store.dispatch(SessionActions.authorize(false, renderApp));
@@ -21,28 +12,35 @@ window.handleGoogleApiLoaded = () => {
 function renderApp() {
    ReactDOM.render(
       <Provider store={store}>
-         <Router history={hashHistory}>
-            <Route path='/' component={App}>
-               <Route path='/login' component={LoginPage} />
-               <Route component={LoggedInLayout} onEnter={requireAuth}>
-                  <Route path='/about' component={AboutPage} />
-                  <Route path='/lists' component={TaskListsPage}>
-                     <Route path='/lists/:id' component={TasksPage} />
-                  </Route>
-               </Route>
-            </Route>
-         </Router>
+         {routes}
       </Provider>,
       document.getElementById('mount-point')
    );
 }
 
-function requireAuth(nextState, replace) {
-   const isLoggedIn = store.getState().auth.isLoggedIn;
-   if (!isLoggedIn) {
-      replace({
-         pathname: '/login',
-         state: { nextPathname: nextState.location.pathname }
-      })
-   }
-}
+
+// function generateTable(number, colors) {
+// 	const items = [];
+//   for(let i = 0; i < number/2; i++) {
+//   	const item = [
+//     	{
+//         id: Math.random(),
+//         isFlipped: false,
+//         isValid: true,
+//         color: colors[i]
+//       },
+//       {
+//       	id: Math.random(),
+//         isFlipped: false,
+//         isValid: true,
+//         color: colors[i]
+//       }
+//     ];
+//     item.map(item => items.push(item));
+//   }
+//   return items;
+// }
+//
+// const colors = ['red', 'green', 'blue', 'yellow', 'orange', 'silver', 'pink'];
+//
+// console.log(generateTable(14, colors));

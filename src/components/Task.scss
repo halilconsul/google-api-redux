@@ -1,19 +1,21 @@
+@import '../style/variables.scss';
+
 .Task {
    display: flex;
    flex-direction: row;
    justify-content: space-between;
    align-items: center;
    width: 100%;
-   margin: 0 16px;
-   padding: 5px 0;
-   border-bottom: 1px solid #e6e6e6;
+   margin: 0 $base-margin;
+   padding: $base-padding/4 0;
+   border-bottom: 1px solid $silver;
 
    &__editing {
       display: flex;
       justify-content: space-between;
 
       .Task__input {
-         margin: 0 10px;
+         margin: 0 $base-margin/2;
          border: none;
          width: 70%;
 
@@ -30,14 +32,5 @@
    .Task__text {
       width: 70%;
       min-height: 20px;
-   }
-
-   .Task__control{
-
-      .Task_buttons {
-         color: pink;
-         background-color: blue;
-         // border: 1px solid grey;
-      }
    }
 }

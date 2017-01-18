@@ -2,7 +2,8 @@ import AppConstants from '../constants/AppConstants.js';
 
 const initialState = {
    tasks: [],
-   isLoading: true
+   isLoading: true,
+   error: null
 }
 
 function formatTasks(data) {
@@ -16,12 +17,20 @@ function formatTasks(data) {
    }
 }
 
+function getErrorMessageByCode(code) {
+   const errorMessages = {
+      400: 'Cannot load taskList (what da fuck)'
+   };
+   return errorMessages[code] || 'Something bad happened'
+}
+
 export default function(state=initialState, action) {
    switch (action.type) {
       case `${AppConstants.TASKS_LOAD}_PENDING`: {
          return {
             ...state,
-            isLoading: true
+            isLoading: true,
+            error: null
          }
       }
          break;
@@ -32,26 +41,29 @@ export default function(state=initialState, action) {
             return {
                ...state,
                tasks: items.map(formatTasks),
-               isLoading: false
+               isLoading: false,
+               error: null
             }
          } else {
             return {
                ...state,
                tasks: [],
-               isLoading: false
+               isLoading: false,
+               error: null
             }
          }
       }
          break;
 
-      case `${AppConstants.TASKS_LOAD}_REJECTED`: {
-         return {
-            ...state,
-            tasks: [],
-            isLoading: false
+         case `${AppConstants.TASKS_LOAD}_REJECTED`: {
+            const { code: errorCode } = action.payload.result.error;
+            return {
+               ...state,
+               isLoading: false,
+               error: getErrorMessageByCode(errorCode)
+            }
          }
-      }
-         break;
+            break;
 
       case AppConstants.TASK_UPDATE_PENDING: {
          const { taskId } = action.payload;

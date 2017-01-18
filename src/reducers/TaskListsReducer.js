@@ -51,7 +51,19 @@ export default function(state=initialState, action) {
       }
          break;
 
-      case `${AppConstants.TASK_LIST_UPDATE}_FULFILLED`: {
+      case AppConstants.TASK_LIST_UPDATE_PENDING: {
+         const { taskListId } = action.payload;
+         const allTasks = [...state.taskLists];
+         const updatedTask = allTasks.findIndex(task => task.id == taskListId);
+         allTasks[updatedTask].name = action.payload.title;
+         return {
+            ...state,
+            taskLists: allTasks
+         }
+      }
+         break;
+
+      case AppConstants.TASK_LIST_UPDATE_FULFILLED: {
          const { id: taskListId } = action.payload.result;
          const alltaskLists = [...state.taskLists];
          const updatedTaskList = alltaskLists.findIndex(task => task.id === taskListId);
@@ -62,6 +74,14 @@ export default function(state=initialState, action) {
          }
       }
          break;
+
+         case AppConstants.TASK_LIST_UPDATE_REJECTED: {
+            return {
+               ...state,
+               taskLists: []
+            }
+         }
+            break;
 
       case AppConstants.TASK_LIST_DELETE_PENDING: {
          const taskListId = action.payload;

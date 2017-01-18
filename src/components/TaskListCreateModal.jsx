@@ -13,15 +13,15 @@ class TaskListCreateModal extends React.Component {
       this.state = { name: '' }
    }
 
-   handleSubmit() {
-      const { onSubmit } = this.props;
-      if (onSubmit) onSubmit({ name: this.state.name });
-      this.clearStateName();
-   }
-
    handleClose() {
       const { onClose } = this.props;
       if (onClose) onClose();
+      this.clearStateName();
+   }
+
+   handleSubmit() {
+      const { onSubmit } = this.props;
+      if (onSubmit) onSubmit({ name: this.state.name });
       this.clearStateName();
    }
 

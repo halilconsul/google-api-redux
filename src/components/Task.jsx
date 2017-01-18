@@ -51,72 +51,98 @@ class Task extends React.Component {
       this.input.focus();
    }
 
+   renderEditedButtons() {
+      return (
+         <div className="Task__control">
+            <IconButton
+               tooltip="Save"
+               tooltipPosition="bottom-right"
+               iconStyle={{ color: 'grey' }}
+               onClick={this.handleSave.bind(this)}
+            >
+               <CompleteIcon />
+            </IconButton>
+
+            <IconButton
+               tooltip="Cancel"
+               tooltipPosition="bottom-right"
+               iconStyle={{ color: 'grey' }}
+               onClick={this.handleEditorClose.bind(this)}
+            >
+               <CancelIcon />
+            </IconButton>
+         </div>
+      )
+   }
+
+   renderTaskEdited() {
+      return (
+         <div className="Task Task__editing">
+            <input
+               type="text"
+               className="Task__input"
+               defaultValue={this.props.text}
+               ref={c => this.input = c}
+               onKeyDown={this.handleKeyDown.bind(this)}
+            />
+            { this.renderEditedButtons() }
+         </div>
+      );
+   }
+
+   renderDefaultButtons() {
+      return (
+         <div className="Task__control">
+            <IconButton
+               tooltip="Edit"
+               tooltipPosition="bottom-right"
+               iconStyle={{ color: 'grey' }}
+               onClick={this.handleEdit.bind(this)}
+            >
+               <ContentEdit />
+            </IconButton>
+            <IconButton
+               tooltip="Delete"
+               tooltipPosition="bottom-right"
+               iconStyle={{ color: 'grey' }}
+               onClick={this.props.onDelete}
+            >
+               <ContentDelete />
+            </IconButton>
+         </div>
+      )
+   }
+
+   renderTaskCompleted() {
+      return (
+         <div className="Task">
+            <Checkbox
+               className="Task__checkbox"
+               checked={this.props.isCompleted}
+               onCheck={this.handleCheck.bind(this)}
+            />
+            <div className="Task__text">
+               {this.props.text}
+            </div>
+            {this.renderDefaultButtons()}
+         </div>
+      );
+   }
+
+   renderTask() {
+      if (this.state.isEditing) {
+         return this.renderTaskEdited()
+      } else {
+         return this.renderTaskCompleted()
+      }
+   }
+
    render() {
       return (
          <MuiThemeProvider>
-            {
-               this.state.isEditing
-               ?
-                  <div className="Task Task__editing">
-                     <input
-                        type="text"
-                        className="Task__input"
-                        defaultValue={this.props.text}
-                        ref={c => this.input = c}
-                        onKeyDown={this.handleKeyDown.bind(this)}
-                     />
-                     <div className="Task__control">
-                        <IconButton
-                           tooltip="Save"
-                           tooltipPosition="bottom-right"
-                           iconStyle={{ color: 'grey' }}
-                           onClick={this.handleSave.bind(this)}
-                        >
-                           <CompleteIcon />
-                        </IconButton>
-
-                        <IconButton
-                           tooltip="Cancel"
-                           tooltipPosition="bottom-right"
-                           iconStyle={{ color: 'grey' }}
-                           onClick={this.handleEditorClose.bind(this)}
-                        >
-                           <CancelIcon />
-                        </IconButton>
-                     </div>
-                  </div>
-               :
-                  <div className="Task">
-                     <Checkbox
-                        className="Task__checkbox"
-                        checked={this.props.isCompleted}
-                        onCheck={this.handleCheck.bind(this)}
-                     />
-                     <div className="Task__text">
-                        {this.props.text}
-                     </div>
-                     <div className="Task__control">
-                        <IconButton
-                           tooltip="Edit"
-                           tooltipPosition="bottom-right"
-                           iconStyle={{ color: 'grey' }}
-                           onClick={this.handleEdit.bind(this)}
-                        >
-                           <ContentEdit />
-                        </IconButton>
-                        <IconButton
-                           tooltip="Delete"
-                           tooltipPosition="bottom-right"
-                           iconStyle={{ color: 'grey' }}
-                           onClick={this.props.onDelete}
-                        >
-                           <ContentDelete />
-                        </IconButton>
-                     </div>
-                  </div>
-            }
+            {this.renderTask()}
          </MuiThemeProvider>
-      )
+      );
    }
 }
 

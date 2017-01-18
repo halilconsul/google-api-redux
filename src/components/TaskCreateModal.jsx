@@ -71,8 +71,8 @@ class TaskCreateModal extends React.Component {
             <h3 className="TaskCreateModal__title">Add Task</h3>
             <TextField
                fullWidth
-               ref={c => this.taskinput = c}
                value={text}
+               ref={c => this.taskinput = c}
                hintText='e.g. buy a bottle of milk'
                floatingLabelText='Enter task Description'
                onChange={this.handleTextChange.bind(this)}
