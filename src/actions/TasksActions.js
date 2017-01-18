@@ -11,7 +11,6 @@ const TasksActions = {
    },
 
    createTask(params) {
-      console.log(params);
       const request = api.insertTask({
          taskListId: params.taskListId,
          title: params.name

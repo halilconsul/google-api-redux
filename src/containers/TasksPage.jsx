@@ -47,7 +47,6 @@ class TasksPageContainer extends React.Component {
    }
 
    handleTaskSubmit(task) {
-      console.log(task);
       this.props.TasksActions.createTask({
          taskListId: this.props.params.id,
          ...task
@@ -88,28 +87,40 @@ class TasksPageContainer extends React.Component {
       });
    }
 
+   renderTasksPage() {
+      return (
+         <TasksPage
+            tasks={this.props.tasks}
+            error={this.props.error}
+            currentTaskList={this.props.currentTaskList}
+            isLoadingTask={this.props.isLoading}
+            onTaskListEdit={this.handleTaskListEdit.bind(this)}
+            onTaskListDelete={this.handleTaskListDelete.bind(this)}
+            onTaskAdd={this.handleTaskAdd.bind(this)}
+            onTaskDelete={this.handleTaskDelete.bind(this)}
+            onTaskStatusChange={this.handleTaskStatusChange.bind(this)}
+            onTaskUpdate={this.handleTaskUpdate.bind(this)}
+         />
+      );
+   }
+
+   renderModal() {
+      return (
+         <TaskListCreateModal
+            isOpen={this.state.isCreatingTask}
+            onSubmit={this.handleTaskSubmit.bind(this)}
+            onClose={this.handleTaskCreateModalClose.bind(this)}
+         />
+      );
+   }
+
    render() {
       return (
          <div>
-            <TasksPage
-               tasks={this.props.tasks}
-               error={this.props.error}
-               currentTaskList={this.props.currentTaskList}
-               isLoadingTask={this.props.isLoading}
-               onTaskListEdit={this.handleTaskListEdit.bind(this)}
-               onTaskListDelete={this.handleTaskListDelete.bind(this)}
-               onTaskAdd={this.handleTaskAdd.bind(this)}
-               onTaskDelete={this.handleTaskDelete.bind(this)}
-               onTaskStatusChange={this.handleTaskStatusChange.bind(this)}
-               onTaskUpdate={this.handleTaskUpdate.bind(this)}
-            />
-            <TaskListCreateModal
-               isOpen={this.state.isCreatingTask}
-               onSubmit={this.handleTaskSubmit.bind(this)}
-               onClose={this.handleTaskCreateModalClose.bind(this)}
-            />
+            {this.renderTasksPage()}
+            {this.renderModal()}
          </div>
-      )
+      );
    }
 }
 

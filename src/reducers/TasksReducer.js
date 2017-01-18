@@ -53,13 +53,13 @@ export default function(state=initialState, action) {
 // ======= __TASK_UPDATE__ ======= //
 
       case AppConstants.TASK_UPDATE_PENDING: {
+         // if the object has 'isCompleted', it will be replaced
+         // if it doesn't, nothing will be changed
+         // the same thing with 'text'
          const { taskId } = action.payload;
          const { isCompleted } = action.payload;
          const allTasks = [...state.tasks];
          const updatedTask = allTasks.findIndex(task => task.id === taskId);
-         // if the object has 'isCompleted', it will be replaced
-         // if it doesn't, nothing will be changed
-         // the same thing with 'text'
          allTasks[updatedTask].isCompleted = isCompleted !== undefined ? isCompleted : allTasks[updatedTask].isCompleted;
          allTasks[updatedTask].text = action.payload.text || allTasks[updatedTask].text;
          return {

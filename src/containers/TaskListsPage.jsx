@@ -33,21 +33,33 @@ class TaskListsPageContainer extends React.Component {
       this.setState({ isCreatingTaskList: false });
    }
 
+   renderTaskListPage() {
+      return (
+         <TaskListsPage
+            taskLists={this.props.taskLists}
+            currentTaskListId={this.props.params.id}
+            children={this.props.children}
+            onRouteChange={this.changeRoute.bind(this)}
+            onAddTaskList={this.handleAddTaskList.bind(this)}
+         />
+      );
+   }
+
+   renderModal() {
+      return (
+         <TaskListCreateModal
+            isOpen={this.state.isCreatingTaskList}
+            onSubmit={this.handleTaskListSubmit.bind(this)}
+            onClose={this.handleTaskListCreateModalClose.bind(this)}
+         />
+      );
+   }
+
    render() {
       return (
          <div>
-            <TaskListsPage
-               taskLists={this.props.taskLists}
-               currentTaskListId={this.props.params.id}
-               children={this.props.children}
-               onRouteChange={this.changeRoute.bind(this)}
-               onAddTaskList={this.handleAddTaskList.bind(this)}
-            />
-            <TaskListCreateModal
-               isOpen={this.state.isCreatingTaskList}
-               onSubmit={this.handleTaskListSubmit.bind(this)}
-               onClose={this.handleTaskListCreateModalClose.bind(this)}
-            />
+            {this.renderTaskListPage()}
+            {this.renderModal()}
          </div>
       );
    }

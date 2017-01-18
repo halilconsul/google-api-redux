@@ -1,5 +1,6 @@
 import React from 'react';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { withRouter } from 'react-router';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
@@ -12,16 +13,22 @@ import AddButton from 'material-ui/svg-icons/content/add';
 import './TaskListsPage.scss';
 
 class TaskListsPage extends React.Component {
+   redirectTo(route) {
+      this.props.router.push(`/${route}`)
+   }
+
    renderNavButtons() {
       return (
          <List>
             <ListItem
                primaryText="Home"
                leftIcon={<HomeButton />}
+               onClick={this.redirectTo.bind(this, 'lists')}
             />
             <ListItem
                primaryText="About"
                leftIcon={<ActionAssignment />}
+               onClick={this.redirectTo.bind(this, 'about')}
             />
          </List>
       );
@@ -95,4 +102,4 @@ TaskListsPage.propTypes = {
    onAddTaskList: React.PropTypes.func
 }
 
-export default TaskListsPage;
+export default withRouter(TaskListsPage);

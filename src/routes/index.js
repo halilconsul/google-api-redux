@@ -1,10 +1,11 @@
 import React from 'react';
-import { Router, Route, hashHistory } from 'react-router';
+import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import store from '../store/index.js';
 
 import App from '../App.jsx';
 import LoggedInLayout from '../components/LoggedInLayout.jsx';
 import AboutPage from '../components/AboutPage.jsx';
+import NoPageFound from '../components/NoPageFound.jsx';
 
 import LoginPage from '../containers/LoginPage.jsx';
 import TaskListsPage from '../containers/TaskListsPage.jsx';
@@ -20,6 +21,7 @@ const routes = (
                <Route path='/lists/:id' component={TasksPage} />
             </Route>
          </Route>
+         <Route path='*' component={NoPageFound} />
       </Route>
    </Router>
 );

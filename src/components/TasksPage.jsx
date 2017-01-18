@@ -133,9 +133,9 @@ class TasksPage extends React.Component {
    renderError() {
       return (
          <div className="TasksPage">
-            <div className="TasksPage__error">
+            <h2 className="TasksPage__error">
                {this.props.error}
-            </div>
+            </h2>
          </div>
       );
    }

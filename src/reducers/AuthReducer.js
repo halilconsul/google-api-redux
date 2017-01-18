@@ -6,6 +6,9 @@ const initialState = {
 
 export default function reducer(state=initialState, action) {
    switch (action.type) {
+
+// ======= __SESSION_AUTHORIZE__ ======= //
+
       case 'SESSION_AUTHORIZE_FULFILLED': {
          return {
             ...state,

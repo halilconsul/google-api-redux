@@ -156,5 +156,4 @@ Task.propTypes = {
    onDelete: React.PropTypes.func
 }
 
-
 export default Task;
