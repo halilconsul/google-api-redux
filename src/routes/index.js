@@ -14,6 +14,7 @@ import TasksPage from '../containers/TasksPage.jsx';
 const routes = (
    <Router history={hashHistory}>
       <Route path='/' component={App}>
+         <IndexRoute component={LoginPage} />
          <Route path='/login' component={LoginPage} />
          <Route component={LoggedInLayout} onEnter={requireAuth}>
             <Route path='/about' component={AboutPage} />

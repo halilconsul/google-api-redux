@@ -1,9 +1,9 @@
 import AppConstants from '../constants/AppConstants.js';
-import api from '../api/index.js';
+import { listTaskLists, showTaskList, insertTaskList, updateTaskList, deleteTaskList,  } from '../api/index.js';
 
 const TaskListsActions = {
    loadTaskLists() {
-      const request = api.listTaskLists();
+      const request = listTaskLists();
       return {
          type: AppConstants.TASK_LISTS_LOAD,
          payload: request
@@ -11,7 +11,7 @@ const TaskListsActions = {
    },
 
    loadTaskList(taskListId) {
-      const request = api.showTaskList(taskListId);
+      const request = showTaskList(taskListId);
       return {
          type: AppConstants.TASK_LIST_LOAD,
          payload: request
@@ -19,7 +19,7 @@ const TaskListsActions = {
    },
 
    createTaskList(taskList) {
-      const request = api.insertTaskList({ title: taskList.name });
+      const request = insertTaskList({ title: taskList.name });
       return {
          type: AppConstants.TASK_LIST_CREATE,
          payload: request
@@ -35,7 +35,7 @@ const TaskListsActions = {
                'title': params.name
             }
          });
-         api.updateTaskList({
+         updateTaskList({
             taskListId: params.taskListId,
             title: params.name
          })
@@ -60,7 +60,7 @@ const TaskListsActions = {
             type: AppConstants.TASK_LIST_DELETE_PENDING,
             payload: params.taskListId
          });
-         api.deleteTaskList({
+         deleteTaskList({
             taskListId: params.taskListId
          })
          .then(response => {

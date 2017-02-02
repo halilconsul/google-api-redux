@@ -1,9 +1,9 @@
 import AppConstants from '../constants/AppConstants.js';
-import api from '../api/index.js';
+import { listTasks, insertTask, updateTask, deleteTask } from '../api/index.js';
 
 const TasksActions = {
    loadTasks(taskListId) {
-      const request = api.listTasks(taskListId);
+      const request = listTasks(taskListId);
       return {
          type: AppConstants.TASKS_LOAD,
          payload: request
@@ -11,7 +11,7 @@ const TasksActions = {
    },
 
    createTask(params) {
-      const request = api.insertTask({
+      const request = insertTask({
          taskListId: params.taskListId,
          title: params.name
       });
@@ -30,7 +30,7 @@ const TasksActions = {
                'isCompleted': params.isCompleted
             }
          });
-         api.updateTask({
+         updateTask({
             taskListId: params.taskListId,
             taskId: params.taskId,
             status: params.isCompleted ? 'completed' : 'needsAction'
@@ -59,7 +59,7 @@ const TasksActions = {
                'text': params.text
             }
          });
-         api.updateTask({
+         updateTask({
             taskListId: params.taskListId,
             taskId: params.taskId,
             title: params.text
@@ -87,7 +87,7 @@ const TasksActions = {
                'taskId': params.taskId
             }
          });
-         api.deleteTask({
+         deleteTask({
             taskListId: params.taskListId,
             taskId: params.taskId
          })
